@@ -14,12 +14,18 @@ const LABEL_NAME  = 'DriveUpload';
 const MAX_THREADS = 50;
 const MAX_BYTES   = 25 * 1024 * 1024; // 25 MB
 
-function syncLabeledEmailsToDrive() {
-  ensureTrigger_();
+function syncLabeledEmailsToDrive(e) {
+  // Trigger only needs to be installed on the first manual run. Subsequent
+  // scheduled invocations pass a non-empty event object, so we skip the check.
+  if (!e) ensureTrigger_();
 
-  const label   = GmailApp.getUserLabelByName(LABEL_NAME) || GmailApp.createLabel(LABEL_NAME);
-  const folder  = getOrCreateFolder_(FOLDER_NAME);
+  const label = GmailApp.getUserLabelByName(LABEL_NAME) || GmailApp.createLabel(LABEL_NAME);
   const threads = label.getThreads(0, MAX_THREADS);
+
+  // Fast no-op path: skip the folder lookup if there's nothing to do.
+  if (threads.length === 0) return;
+
+  const folder = getOrCreateFolder_(FOLDER_NAME);
 
   let uploaded = 0, skipped = 0, errors = 0;
 
