@@ -3,13 +3,22 @@
 Workaround to enable AI agents to interact with gmail attachements.
 
 ## Problem
-Stock gmail MCP has no way for llms to look at attachment data. (hopefully soon: https://github.com/modelcontextprotocol/servers/issues/4122)
+
+Claude.ai, ChatGPT, etc. can search gmail and write to google drive, but have no way download an attachment — the one operation that connects them.
+
+Same gap in the stock gmail MCP (hopefully soon: modelcontextprotocol/servers#4122). 
+
+Note: Coding agents sidestep all this by calling the gmail api directly, but that's not an option on web/mobile.
 
 
 ## Workaround
 - Agent labels mail with new "DriveUpload" label
 - New google script uploads all attachments from labeled mails
 - Agent can interact with file on drive
+
+## Requirements
+
+Google account. To drive the workflow from an agent: gmail + drive integrations on your LLM client (Claude.ai web/mobile, similar).
 
 ## Setup
 
